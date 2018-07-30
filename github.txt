@@ -1,0 +1,12 @@
+Date: 2018.7.30
+Author: Liyan Liu
+
+step one: get clone https://github.com/liuliyan1994/D3.js.git
+
+step two: get add . 
+
+step three: git commit -m "descriptions"
+
+step four: git push
+
+step one: git pull
