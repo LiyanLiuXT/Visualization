@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>systemTest</title>
+
+    <script src='js/jquery-2.1.1.min.js'></script>
+    <script src='js/d3.min.js'></script>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"></script>
+
+    <style>
+    body { margin:0; padding:0; font-family:"Lucida Grande"; font-size:12px; }
+    ol, ul {margin: 0; padding: 0; list-style: none; vertical-align: baseline; }
+    a, a:hover, a:active, a:visited { text-decoration:none; }
+    p{display: inline;}
+    
+    table {font-size: 1em;}
+    .ui-draggable, .ui-droppable {background-position: top;}
+
+    #main {position: absolute; top: 0; bottom: 0; width: 100%; height: 100%;}
+    #map {width: 100%; height: 90%;}
+    #topicModel_contral {width: 100%; height: 10%;}
+  </style>
+
+</head>
+
+<body>
+    <div id="main">
+    <div id = "map"></div>
+    <div id = "topicModel_contral">
+        <input type = "text" id = "time_one" class = "time_contral">
+        <P>--</P>
+        <input type = "text" id = "time_two" class = "time_contral">
+        <input type = "button" id = "tSureID" class = "time_contral" value="confirm">
+    </div>
+</div>
+
+<script>
+var map = L.map('map').setView([30.26, 120.19], 12);
+
+L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+    //maxZoom: 18,
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    id: 'mapbox.light'
+}).addTo(map);
+
+var voronoi = d3.geom.voronoi()
+        .x(function(d){ return d.x; })
+        .y(function(d){ return d.y; });
+
+var cell = d3.select(this);
+var point = cell.datum();
+
+var bottom = 30.012 ;
+var up = 30.4439 ;     
+var left = 119.8691 ;  
+var right = 120.461 ;
+var blockCount = 100;
+var wideRange = right-left;
+var heightRange = up-bottom;
+var wideDistance = wideRange/blockCount;
+var heightDistance = heightRange/blockCount;  
+
+/*
+    $("#tSureID").click(function(){
+    var time_one = parseInt($("#time_one").val()); //input the start time value
+    var time_two = parseInt($("#time_two").val()); //input the end time value
+
+        $.getJSON("./data/keyGrids.json",function(keyArea){
+            $.each(keyArea,function(error,data){
+                //console.log(keyArea);
+                var time = parseInt(data.slice(6,8));
+                if(time_one <= time&&time < time_two){
+                    var lngLatIndex = parseInt(data.slice(0,5));
+                    var i = parseInt(lngLatIndex/blockCount);
+                    var j = lngLatIndex%blockCount;
+                    var bound = [[bottom+i*heightDistance, left+j*wideDistance], [bottom+(i+1)*heightDistance, left+(j+1)*wideDistance]];
+                    var center = [bottom + (i+1/2)*heightDistance, left + (j+1/2)*wideDistance]; 
+                    //drawing the rectangles
+                    L.rectangle(bound, {color:' #696969', fillColor: '#FFFFFF', opacity:1, weight: 1}).addTo(map); 
+                }
+            })  
+        });
+    })*/
+
+
+$("#tSureID").click(function(){
+    drawGrids();
+})
+
+
+function drawGrids(){
+    var points = [];
+    d3.selectAll(".rectangles").remove;
+    var aScale = d3.scale.linear() //透明度比例尺
+        .domain([1, 4])
+        .range([0.4, 1]);
+    var foScale = d3.scale.linear() //fill透明度比例尺
+        .domain([1, 4])
+        .range([0.2, 0.5]);
+    var lScale = d3.scale.linear() //边框粗细比例尺
+        .domain([1, 4])
+        .range([1, 4]);
+
+    var time_one = parseInt($("#time_one").val()); //input the start time value
+    var time_two = parseInt($("#time_two").val()); //input the end time value
+
+    $.getJSON("./data/keyGrids.json",function(data){
+        var count = 0; //记录keyGrid的数目
+
+        var showDict = {};
+        var extendDict = new Array();
+        var opacity = 1;
+        var fillOpacity = 1;
+        var zoom = map.getZoom();
+
+        $.each(data, function(index,e){
+            var time = parseInt(e.slice(6,8));
+            if(time_one <= time && time < time_two){
+                //if(count < 20){
+                var gridIndex = e.slice(0,5);
+                if(extendDict[gridIndex]!=null){
+                    higherGrid = extendDict[gridIndex];
+                    subGrid = showDict[higherGrid].num;
+                    showDict[higherGrid].num = showDict[higherGrid].num + 1;
+                    showDict[higherGrid].subgrids.push(gridIndex);
+                }
+                else{
+                //如果grid没有被记录为其他grid的周围点，则说明该grid是第一次出现
+                    gridsInfo=new Object();
+                    subGridList=new Array();
+                    gridsInfo.subgrids=subGridList;
+                    gridsInfo.num=1
+                    showDict[gridIndex]=gridsInfo;
+                    showDict[gridIndex].subgrids.push(gridIndex);
+
+                    var neiIndex;
+                    //记录该第一次出现的grid点的周围gridIndex
+                    if(zoom>12){
+                        if(extendDict[gridIndex]==null){ 
+                            for(var k=99;k<102;k++){
+                            neiIndex=neighbor(gridIndex,k);
+                            extendDict[neiIndex]=gridIndex;
+                            }
+                            neiIndex=neighbor(gridIndex,-1);
+                            extendDict[neiIndex]=gridIndex;
+                            neiIndex=neighbor(gridIndex,1);
+                            extendDict[neiIndex]=gridIndex;
+                            for(var k=-101;k<-98;k++){
+                                neiIndex=neighbor(gridIndex,k);
+                                extendDict[neiIndex]=gridIndex;
+                            } 
+                        }
+                    }//if结尾
+                  
+                  ////////////////////////////////////////////////////////////////////////////////////////
+                  //如果zoom<12，则将范围扩大为16
+                    else{
+                        if(extendDict[gridIndex]==null){ 
+                            for(var k=198;k<203;k++){
+                                neiIndex=neighbor(gridIndex,k);
+                                extendDict[neiIndex]=gridIndex;
+                            }
+                            for(var k=98;k<103;k++){
+                                neiIndex=neighbor(gridIndex,k);
+                                extendDict[neiIndex]=gridIndex;
+                            }
+                            neiIndex=neighbor(gridIndex,-2);
+                            extendDict[neiIndex]=gridIndex;
+                            neiIndex=neighbor(gridIndex,-1);
+                            extendDict[neiIndex]=gridIndex;
+                            neiIndex=neighbor(gridIndex,1);
+                            extendDict[neiIndex]=gridIndex;
+                            neiIndex=neighbor(gridIndex,2);
+                            extendDict[neiIndex]=gridIndex;
+                            for(var k=-102;k<-97;k++){
+                                neiIndex=neighbor(gridIndex,k);
+                                extendDict[neiIndex]=gridIndex;
+                            } 
+                            for(var k=-202;k<-197;k++){
+                                neiIndex=neighbor(gridIndex,k);
+                                extendDict[neiIndex]=gridIndex;
+                            }
+                        }
+                    }//else结尾
+                }
+                    count++;
+                //}
+            }
+        });
+        //console.log(showDict);
+
+        var gridCount = 0;
+        for(var key in showDict){  
+            var grid_index=parseInt(key)
+            var i=parseInt(grid_index/blockCount);
+            var j=grid_index%blockCount;
+            var mergerNum=showDict[key].num;
+            var larger=0.2*Math.log(mergerNum,1.5);
+            var bound=[[bottom+(i-larger)*heightDistance,left+(j-larger)*wideDistance],[bottom+(i+1+larger)*heightDistance,left+(j+1+larger)*wideDistance]];
+
+            opacity = aScale(mergerNum);
+            fillOpacity = foScale(mergerNum);
+
+            var rec = L.rectangle(bound, {color:'#FF216C', opacity:opacity, weight: mergerNum, fillOpacity:fillOpacity}).addTo(map);
+            d3.select(rec._container).select('.leaflet-clickable')
+                .attr('id',key)
+                .attr('class','recangles');
+
+            var location = new Array();
+            location["latitude"] = bottom+(i+0.5)*heightDistance;
+            location["longitude"] = left+(j+0.5)*wideDistance;
+            location["index"] = gridCount
+            location["gridIndex"] = grid_index
+            location["starttime"] = time_one
+            location["endtime"] = time_two
+            points.push(location);
+            gridCount = gridCount + 1;  
+        }
+        //console.log("points:", points);
+        filteredPoints = points.filter(function(d) {
+            var latlng = new L.LatLng(d.latitude, d.longitude);
+            var point = map.latLngToLayerPoint(latlng);
+            //console.log(point);
+            d.x = point.x;
+            d.y = point.y;
+            d[0] = point.x;
+            d[1] = point.y;
+            return true;
+        });
+        //console.log("filteredPoints:", filteredPoints);
+
+        links = [];
+        voronoi(filteredPoints).forEach(function(d){  d.point.cell = d; });
+        //console.log(voronoi(filteredPoints));
+
+        //voronoi连接
+        d3.geom.voronoi().links(filteredPoints).forEach(function(link){
+            //console.log("link:", link);
+            var dx = link.source.x - link.target.x,
+                dy = link.source.y - link.target.y;
+            link.distance = Math.sqrt(dx * dx + dy * dy);
+            links.push(link);
+        });
+        //console.log("links:", links);
+
+        //draw();
+    });
+$(".leaflet-clickable").css("display","none");
+}
+
+
+
+function neighbor(grid,num){
+    gridInt=parseInt(grid);
+    n_grid=gridInt+num;
+    str_grid=string_transfer(n_grid,5)
+    return str_grid
+}
+
+function string_transfer(str,count){
+    str=str.toString(10);//转为10进制、16进制
+    if(str.length<count){
+        var x=count-str.length;
+        var addStr='';
+        for(var i=0;i<x;i++){
+            addStr=addStr+'0';
+        }
+        str=addStr+str;
+    }
+    return str;
+}
+
+
+
+var bounds = map.getBounds(),
+    topLeft = map.latLngToLayerPoint(bounds.getNorthWest()),
+    bottomRight = map.latLngToLayerPoint(bounds.getSouthEast());
+
+
+var svg = d3.select(map.getPanes().overlayPane)
+            .append("svg")
+            .attr("id", "overlay")
+            .attr("class", "leaflet-zoom-hide")
+            .style("width", map.getSize().x + "px")
+            .style("height", map.getSize().y + "px")
+            .style("margin-left", topLeft.x + "px")
+            .style("margin-top", topLeft.y + "px");
+
+var g = svg.append("g")
+            .attr("transform", "translate(" + (-topLeft.x) + "," + (-topLeft.y) + ")");
+
+
+console.log("bounds:", bounds);
+console.log("topLeft:", topLeft);
+console.log("bottomRight:", bottomRight);
+console.log(map.getSize(), map.getSize().x, map.getSize().y);
+
+/*var corner1 = L.latLng(30.1, -119.227),
+corner2 = L.latLng(30.174, -119.125),
+bounds = L.latLngBounds(corner1, corner2);
+*/
+
+</script>
+</body>
+</html>
