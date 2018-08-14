@@ -1,8 +1,8 @@
 Date: 2018.7.30
 Author: Liyan Liu
 
-step one: get clone https://github.com/liuliyan1994/Visualization.git
-step two: get add . 
+step one: git clone https://github.com/liuliyan1994/Visualization.git
+step two: git add . 
 
 step three: git commit -m "descriptions"
 
