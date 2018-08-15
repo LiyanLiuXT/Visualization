@@ -1,1 +1,5 @@
-123
+git clone https://github.com/liuliyan1994/Visualization.git
+git init
+git add .
+git commit -u "descriptions"
+git push 
