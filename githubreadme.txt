@@ -1,3 +1,6 @@
+Date: 2018.8.15
+Author: Liyan Liu
+
 git init # 建立git仓库
 git add . # 将项目的所有文件添加到仓库中
 git commit -m "descriptions" # 将add的文件commit到仓库
