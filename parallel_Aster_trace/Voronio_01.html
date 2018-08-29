@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+path {
+  stroke: #fff;
+}
+
+path:first-child {
+  fill: yellow !important;
+}
+
+circle {
+  fill: #000;
+  pointer-events: none;
+}
+
+.q0-9 { fill: currentcolor; }
+.q1-9 { fill: currentcolor; }
+.q2-9 { fill: currentcolor; }
+.q3-9 { fill: currentcolor; }
+.q4-9 { fill: currentcolor; }
+.q5-9 { fill: currentcolor; }
+.q6-9 { fill: currentcolor; }
+.q7-9 { fill: currentcolor; }
+.q8-9 { fill: currentcolor; }
+
+body { margin:0; padding:0; }
+.map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+<body>
+<div id='map-styled' class='map'> </div>
+<script src='js/jquery-1.9.0.min.js'></script>
+  <script src='js/d3.min.js'></script>
+  
+  <script src="leaflet/leaflet.js"></script>
+  <script src="leaflet/leaflet-src.js"></script>
+  <link rel="stylesheet" href="leaflet/leaflet.css" />
+  
+  <script src='mapbox/mapbox.js'></script>
+  <script src='mapbox/leaflet-heat.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.0/mapbox.css' rel='stylesheet' />
+  <script src='mapbox/leaflet.draw.js'></script>
+  <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.css' rel='stylesheet' />
+  <script src='mapbox/colorbrewer.js'></script>
+<script>
+L.mapbox.accessToken = 'pk.eyJ1IjoiYW5rZXBldCIsImEiOiI3Y2VkZTU3Yjk2ZjQyM2IxNDQyYjc3YmE0NmVkYWY1MSJ9.VUaV0N0XEpC7olhY-Uij4A';
+
+//var map = L.mapbox.map('map-styled', 'mapbox.streets');
+//var map = L.mapbox.map('map-styled', 'mapbox.pirates');
+//var map = L.mapbox.map('map-styled', 'mapbox.pencil');
+//var map = L.mapbox.map('map-styled', 'delimited.ge9h4ffl');
+//var map = L.mapbox.map('map-styled', 'zetter.i73ka9hn');
+var map = L.mapbox.map('map-styled', 'mapbox.streets')
+        .setView([30.26, 120.19], 12);
+		
+var width = 960,
+    height = 500;
+
+var vertices = d3.range(5).map(function(d) {
+  return [Math.random() * width, Math.random() * height];
+});
+console.log(vertices)
+var voronoi = d3.geom.voronoi()
+    //.clipExtent([[0, 0], [width, height]]);
+
+//var svg = d3.select("body").append("svg")
+var bounds = map.getBounds(),
+        topLeft = map.latLngToLayerPoint(bounds.getNorthWest()),
+        bottomRight = map.latLngToLayerPoint(bounds.getSouthEast());
+var svg = d3.select(map.getPanes().overlayPane).append("svg")
+      .attr('id', 'overlay')
+      .attr("class", "leaflet-zoom-hide")
+      .style("width", map.getSize().x + 'px')
+      .style("height", map.getSize().y + 'px')
+      .style("margin-left", topLeft.x + "px")
+      .style("margin-top", topLeft.y + "px");
+
+var path = svg.append("g").selectAll("path");
+
+svg.selectAll("circle")
+    .data(vertices.slice(1))
+  .enter().append("circle")
+    .attr("transform", function(d) { return "translate(" + d + ")"; })
+    .attr("r", 1.5);
+
+redraw();
+
+function redraw() {
+  path = path
+      .data(voronoi(vertices), polygon);
+  //console.log(path)
+  path.exit().remove();
+
+  path.enter().append("path")
+      .attr("class", function(d, i) { return "q" + (i % 9) + "-9"; })
+      .attr("d", polygon);
+
+  path.order();
+}
+
+function polygon(d) {
+//console.log(d)
+  return "M" + d.join("L") + "Z";
+}
+
+</script>

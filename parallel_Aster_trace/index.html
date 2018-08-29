@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=utf-8 />
+  <title></title>
+  <script src='js/jquery-1.9.0.min.js'></script>
+  <script src='js/d3.min.js'></script>
+  
+  <script src="leaflet/leaflet.js"></script>
+  <script src="leaflet/leaflet-src.js"></script>
+  <link rel="stylesheet" href="leaflet/leaflet.css" />
+  <link rel="stylesheet" type="text/css" href="./css/aster.css">
+  <link rel="stylesheet" type="text/css" href="./css/parallel.css"/><!--外部样式表-->
+  
+  <script src='mapbox/mapbox.js'></script>
+  <script src='mapbox/leaflet-heat.js'></script>
+  <link href="./css/base.css" rel="stylesheet" />
+  <link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.0/mapbox.css' rel='stylesheet' />
+  <script src='mapbox/leaflet.draw.js'></script>
+  <!--<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.css' rel='stylesheet' /> -->
+  <script src='mapbox/colorbrewer.js'></script>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body { margin:0; padding:0; }
+    #main { position:absolute; top:0; bottom:0; width:100%;padding-left: 300px; }
+    /*#contral_panel {width:20%;height:100%;float:left;display:inline;}*/
+    #contral_panel{width:18%;height:50px;float:left;}
+    .map {width:100%;height:75%;}
+    .track_contral,#LDA_contral{margin:10px 0 0 10px;float:left;}
+    .track_contral{width:50px; margin:10px 0 0 10px;}
+	.time_contral{width:80px; margin-right:15px;}
+    p{display: inline;}
+	#parallel{width:45%; float:left;  margin-top:45px; margin-left:-210px;}
+	#aster{width:18%; float:left; margin-top:25px; margin-left: 400px;}
+  </style><!-- <style></style>中的内容属于内部样式表 -->
+</head>
+
+<body>
+<div id='main'>
+    <div id='map-styled' class='map'> </div>
+    <div id='contral_panel'>
+        <!--<input type="text" id='traceNum_one' class="track_contral"/>
+        <input type="text" id='traceNum_two' class="track_contral"/>
+        <input type="button" id='mSureID' class="track_contral" value="submit"/>
+        <input type="button" id='clearID' class="track_contral" value="clean"/> -->
+        <div id='LDA_contral'>
+            <ul id="slide-out" class="sidenav sidenav-fixed">
+                <li>
+                <a class="waves-effect waves-light btn-large light-blue">NMF</a>
+                </li>
+                <li>
+                <a class="waves-effect waves-light btn-large light-green">Traffic Flow</a>
+                </li>
+                <input  type="text" id="date_picker" class="datepicker" value="Date">
+                <input type="text" id ="time_picker" class="timepicker" value="Hour">
+                <!--<li><a href="#!">First Sidebar Link</a></li>-->
+                <!--<li><a href="#!">Second Sidebar Link</a></li>-->
+                <input type="text" id='time_one' class="time_contral"/>
+
+                <!--<p>——</p>
+                <input type="text" id='time_two' class="time_contral"/> -->
+                <button id="tSureID" class="btn waves-effect waves-light grey" type="submit" name="action">Submit
+                    <i class="material-icons right">send</i>
+                </button>
+            </ul>
+
+
+        </div>
+    </div>
+    <div class="row">
+            <div id='parallel'> </div>
+            <div id='aster'> </div>
+    </div>
+</div>
+<!--<script src='./src/commonFunction.js'>/</script> -->
+
+<!--<script src='./src/index_draw_06.js'></script> --><!--index_draw_02.js  -->
+<script src="./src/tip.js" ></script>
+<script src="./src/draw.js" ></script>
+<script type="text/javascript" src="./src/parallel1.js"></script>
+<script src='./index_draw_12.js'></script>
+<script src='./src/initControl.js'></script>
+<script type="text/javascript" src="js/materialize.js"></script>
+</body>
+</html>
