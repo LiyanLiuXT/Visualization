@@ -105,8 +105,8 @@ function drawGrids(){
         .domain([1, 4])
         .range([1, 4]);
 
-    var time_one = parseInt($("#time_one").val()); //input the start time value
-    var time_two = parseInt($("#time_two").val()); //input the end time value
+    // var time_one = parseInt($("#time_one").val()); //input the start time value
+    // var time_two = parseInt($("#time_two").val()); //input the end time value
 
     $.getJSON("./data/keyGrids.json",function(data){
         var count = 0; //记录keyGrid的数目

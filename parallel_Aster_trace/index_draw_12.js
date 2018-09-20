@@ -54,13 +54,9 @@ var sourceGrid=traceNumInfo.split('_')[1]; //提取起点grid
 var targetGrid=traceNumInfo.split('_')[2]; //提取终点grid
 
 
-$("#tSureID").click(function(){
-  //var time_one=parseInt($("#time_one").val());
-  //var hour=string_transfer(time_one,2); 
-  //readGridgridDeviceTopicFile(hour);
-  drawGrids();
-
-})
+// $("#tSureID").click(function(){
+//   drawGrids();
+// });
 
 function drawGrids(){
 	points=[];
@@ -75,11 +71,27 @@ function drawGrids(){
   var lScale = d3.scale.linear() //边框粗细比例尺
       .domain([1, 4])
       .range([1, 4]);
-  var time_one=parseInt($("#time_one").val());
-  var time_two=time_one+1;
-  var hour=string_transfer(time_one,2);
+    var hour = $("#time_picker").val();
+    var first = hour.toString().slice(0,2);
+    var last = hour.toString().slice(6,8);
+    var time_one_new;
+    if (last == "PM"){
+        time_one_new =  parseInt(first,10) + 12;
+        if (time_one_new == 24){
+            time_one_new = 0;
+            searchHour = "0".concat(time_one_new.toString())
+        }
+    }
+    else{
+        time_one_new = parseInt(first,10);
+        searchHour = "0".concat(time_one_new.toString())
+    }
+  // var time_one=parseInt($("#time_one").val());
+    var time_one=time_one_new;
+  var time_two=parseInt(time_one_new)+1;
+  // var hour="0".concat(time_one_new.toString());
   
-  readGridgridDeviceTopicFile(hour);
+  readGridgridDeviceTopicFile(searchHour);
   //console.log(gridgridDeviceTopic);
   
   $.getJSON("./data/keyGrids.json",function(data) {
@@ -901,7 +913,6 @@ function readLinkTopicFile(){
    $.getJSON("./data/gridTraceTopics_01.json",function(data){
         $.each(data,function(key,value){
           var topicvalue=new Array();
-         
           $.each(value,function(k,v){
             var topicInfo=new Object();           
             if(k!='num'&&k!='topicSum'){
@@ -961,7 +972,6 @@ function readGridgridDeviceTopicFile(hour){
    /////////////////////////////////////////////////////////////////////
    $.ajax({
     	url: "./data/"+hour+"/gridgridDeviceTopicInfo.json",
-    	async: false,
     	dataType: 'json',
     	success: function(data) {
     		$.each(data,function(key,value){

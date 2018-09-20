@@ -2,3 +2,5 @@ parallel_Aster_trace/.idea/
 parallel_Aster_trace/NMF/doc_word.csv
 parallel_Aster_trace/data/
 .vscode/*
+.idea/*
+node_modules/*

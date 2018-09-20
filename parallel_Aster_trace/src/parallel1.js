@@ -1,3 +1,4 @@
+
 var gridgridDeviceLocation={}; //???????????grid???????
 var traceLine={}; //??????????????id
 var screenWidth;//??????
@@ -15,8 +16,8 @@ var m = [20, 10, 30, 40];
 var w = screenWidth*0.3 - m[1] - m[3];
 var h = 170 - m[0] - m[2];
 
-var x = d3.scale.ordinal().domain(traits).rangePoints([0, w]),
-    y = {};
+let x = d3.scale.ordinal().domain(traits).rangePoints([0, w]),
+	y = {};
 var legendScale=d3.scale.ordinal().domain(species).range([0,1,2,3,4]);
 var c = d3.scale.category10();
 var showTraceId={};	

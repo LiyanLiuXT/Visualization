@@ -3,21 +3,21 @@
 <head>
   <meta charset=utf-8 />
   <title></title>
-  <script src='js/jquery-2.1.1.min.js'></script>
-  <script src='js/d3.min.js'></script>
+  <script src='jquery-2.1.1.min.js'></script>
+  <script src='../js/d3.min.js'></script>
   
-  <script src="leaflet/leaflet.js"></script>
-  <script src="leaflet/leaflet-src.js"></script>
-  <link rel="stylesheet" href="leaflet/leaflet.css" />
+  <script src="../leaflet/leaflet.js"></script>
+  <script src="../leaflet/leaflet-src.js"></script>
+  <link rel="stylesheet" href="../leaflet/leaflet.css" />
   
-  <script src='mapbox/mapbox.js'></script>
-  <script src='mapbox/leaflet-heat.js'></script>
+  <script src='../mapbox/mapbox.js'></script>
+  <script src='../mapbox/leaflet-heat.js'></script>
   <!-- <link href="./base.css" rel="stylesheet" /> -->
-  <script src='mapbox/leaflet.draw.js'></script>
-  <script src='mapbox/colorbrewer.js'></script>
+  <script src='../mapbox/leaflet.draw.js'></script>
+  <script src='../mapbox/colorbrewer.js'></script>
 
   <style>
-    body { margin:0; padding:0; font-family:"Lucida Grande"; font-size:12px; }
+    body { margin:0; padding:0;  font-size:12px; }
 	ol, ul {margin: 0; padding: 0; list-style: none; vertical-align: baseline; }
 	a, a:hover, a:active, a:visited { text-decoration:none; }
 	p{display: inline;}
@@ -123,7 +123,7 @@ $("#tSureID").click(function(){
 					//#1f77b4 #ff7f0e #2ca02c #d62728 #9467bd
 					// blue    orange  green    red    purple
 					//console.log(c(6));
-					var color=colorScale(key);
+					let color=colorScale(key);
 					//console.log(c(0),c(1),c(2),c(3),c(4),c(5));
 
 					
