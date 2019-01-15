@@ -46,8 +46,13 @@ var traceNumInfo=traceNumFile.split('.')[0];
 // var targetGrid=traceNumInfo.split('_')[2]; //提取终点grid
 
 function drawGrids(){
+    var optionOfCompare = localStorage.getItem("optionOfCompare");
     points=[];
-    d3.selectAll(".recangles").remove();
+    if(optionOfCompare){
+    }
+    else{
+        d3.selectAll(".recangles").remove();
+    }
     let aScale = d3.scale.linear() //透明度比例尺
         .domain([1, 4])
         .range([0.4, 1]);

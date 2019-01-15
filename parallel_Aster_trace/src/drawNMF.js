@@ -1,5 +1,11 @@
 function drawNMFmapHourly (){
-    d3.select("g.parent").selectAll("*").remove();
+    var optionOfCompare = localStorage.getItem("optionOfCompare");
+    if(optionOfCompare){
+
+    }
+    else{
+        d3.select("g.parent").selectAll("*").remove();
+    }
         let time_one = parseInt(time_nmf[0].slice(0,2));
         let time_two = parseInt(time_nmf[1].slice(0,2));
 

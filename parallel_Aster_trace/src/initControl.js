@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function() {
     //sidenav
     const nav = document.querySelectorAll('.sidenav');
     var Nav = M.Sidenav.init(nav, {
-        edge:'right',
     });
 
 
@@ -77,13 +76,13 @@ $("#chart").hide();
 $(document).ready(function () {
     drawNMF_graph();
     $("input").change(function() {
-        if($(this).is(':checked')) {
+        if($("#checkNMF").is(':checked')) {
             $("#nmf_control").show();
             $("#TraVis_control").hide();
             $("#chart").show();
             localStorage.setItem("switchTraNmf",1);
         }
-        else {
+        else if($("#checkTrafficFlow").is(':checked')){
             localStorage.setItem("switchTraNmf",0);
             $("#TraVis_control").show();
             $("#nmf_control").hide();
@@ -93,8 +92,14 @@ $(document).ready(function () {
     if($("#checkNMF").is(':checked')){
         localStorage.setItem("switchTraNmf",1);
     }
-    else {
+    else if($("#checkTrafficFlow").is(':checked')){
         localStorage.setItem("switchTraNmf",0);
+    }
+    if($("#checkCompare").is(':checked')){
+        localStorage.setItem("optionOfCompare",1);
+    }
+    else {
+        localStorage.setItem("optionOfCompare",0);
     }
 });
 
