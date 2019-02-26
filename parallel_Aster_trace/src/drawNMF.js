@@ -183,7 +183,7 @@ function drawNMF_graph() {
         return str;
     }
 
-    var margin = {top: 20, right: 200, bottom: 0, left: 20};
+    var margin = {top: 20, right: 200, bottom: 0, left: 80};
     /*var	width = 1100;
     var	height = 1050;*/
     var	width = 500;

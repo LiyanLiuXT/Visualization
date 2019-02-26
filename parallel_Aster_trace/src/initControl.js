@@ -1,10 +1,28 @@
+console.log("initControl");
 document.addEventListener('DOMContentLoaded', function() {
     //sidenav
     const nav = document.querySelectorAll('.sidenav');
-    var Nav = M.Sidenav.init(nav, {
+    var Nav = M.Sidenav.init(nav, {});
+
+    //selector
+    var selector = document.querySelectorAll('select');
+    var Selector = M.FormSelect.init(selector,{});
+
+    //slider
+    var slider = document.getElementById('test-slider');
+    noUiSlider.create(slider, {
+        start: [6, 12],
+        connect: true,
+        step: 1,
+        orientation: 'horizontal', // 'horizontal' or 'vertical'
+        range: {
+            'min': 0,
+            'max':24
+        },
+        format: wNumb({
+            decimals: 0
+        })
     });
-
-
     //datePicker
     // var date = document.querySelectorAll('.datepicker');
     // var Date = M.Datepicker.init(date, {
@@ -73,46 +91,84 @@ TraVis_time_slider.noUiSlider.on('update',function (value,handle) {
 });
 $("#nmf_control").hide();
 $("#chart").hide();
+$("#InteractiveView").hide();
+
 $(document).ready(function () {
     drawNMF_graph();
     $("input").change(function() {
         if($("#checkNMF").is(':checked')) {
             $("#nmf_control").show();
-            $("#TraVis_control").hide();
             $("#chart").show();
             localStorage.setItem("switchTraNmf",1);
         }
-        else if($("#checkTrafficFlow").is(':checked')){
-            localStorage.setItem("switchTraNmf",0);
-            $("#TraVis_control").show();
+        else{
             $("#nmf_control").hide();
             $("#chart").hide();
+            localStorage.setItem("switchTraNmf",0);
+        }
+        if($("#checkTrafficFlow").is(':checked')){
+            localStorage.setItem("switchTrafficFlow",1);
+            $("#TraVis_control").show();
+        }
+        else{
+            localStorage.setItem("switchTrafficFlow",0);
+            $("#TraVis_control").hide();
+        }
+        if($("#checkInterView").is(':checked')){
+            localStorage.setItem("InteractiveView",1);
+            $("#InteractiveView").show();
+        }
+        else{
+            localStorage.setItem("InteractiveView",0);
+            $("#InteractiveView").hide();
         }
     });
-    if($("#checkNMF").is(':checked')){
+    if($("#checkNMF").is(':checked')) {
+        $("#nmf_control").show();
+        $("#chart").show();
         localStorage.setItem("switchTraNmf",1);
     }
-    else if($("#checkTrafficFlow").is(':checked')){
+    else{
+        $("#nmf_control").hide();
+        $("#chart").hide();
         localStorage.setItem("switchTraNmf",0);
     }
-    if($("#checkCompare").is(':checked')){
-        localStorage.setItem("optionOfCompare",1);
+    if($("#checkTrafficFlow").is(':checked')){
+        localStorage.setItem("switchTrafficFlow",1);
+        $("#TraVis_control").show();
     }
-    else {
-        localStorage.setItem("optionOfCompare",0);
+    else{
+        localStorage.setItem("switchTrafficFlow",0);
+        $("#TraVis_control").hide();
     }
+    if($("#checkInterView").is(':checked')){
+        localStorage.setItem("InteractiveView",1);
+        $("#InteractiveView").show();
+    }
+    else{
+        localStorage.setItem("InteractiveView",0);
+        $("#InteractiveView").hide();
+    }
+    // if($("#checkCompare").is(':checked')){
+    //     localStorage.setItem("optionOfCompare",1);
+    // }
+    // else {
+    //     localStorage.setItem("optionOfCompare",0);
+    // }
 });
 
 //control onclick
 function c_onclick() {
     console.log("c_onclick");
     let switchTraNmf = localStorage.getItem("switchTraNmf");
-    console.log("switchTraNmf", switchTraNmf);
-   if(switchTraNmf==0){
-       drawGrids();
-   }
-   else {
+    let switchTrafficFlow = localStorage.getItem("switchTrafficFlow")
+   if(switchTraNmf==1){
        drawNMFmapHourly();
+       console.log("drawNMFmapHourly");
+   }
+   if(switchTrafficFlow ==1) {
+       drawGrids();
+       console.log("drawGrid");
    }
 }
 

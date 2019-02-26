@@ -1,158 +1,303 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset=utf-8 />
+    <meta charset=utf-8/>
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Cache-Control" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title></title>
-  <script src='js/jquery-1.9.0.min.js'></script>
-  <script src='js/d3.min.js'></script>
-  
-  <script src="leaflet/leaflet.js"></script>
-  <script src="leaflet/leaflet-src.js"></script>
-  <link rel="stylesheet" href="leaflet/leaflet.css?v=191919" />
-  <link rel="stylesheet" type="text/css" href="./css/aster.css">
-  <link rel="stylesheet" type="text/css" href="./css/parallel.css"/><!--外部样式表-->
-  
-  <script src='mapbox/mapbox.js'></script>
-  <script src='mapbox/leaflet-heat.js'></script>
-  <link href="./css/base.css" rel="stylesheet" />
-  <link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.0/mapbox.css' rel='stylesheet' />
-  <script src='mapbox/leaflet.draw.js'></script>
-  <script src='mapbox/colorbrewer.js'></script>
-    <link href="js/nouislider.min.css" rel="stylesheet" />
+    <script src='js/jquery-1.9.0.min.js'></script>
+    <script src='js/d3.min.js'></script>
+
+    <script src="leaflet/leaflet.js"></script>
+    <script src="leaflet/leaflet-src.js"></script>
+    <link rel="stylesheet" href="leaflet/leaflet.css?v=191919"/>
+    <link rel="stylesheet" type="text/css" href="./css/aster.css">
+    <link rel="stylesheet" type="text/css" href="./css/parallel.css"/><!--外部样式表-->
+
+    <script src='mapbox/mapbox.js'></script>
+    <script src='mapbox/leaflet-heat.js'></script>
+    <link href="./css/base.css" rel="stylesheet"/>
+    <link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.0/mapbox.css' rel='stylesheet'/>
+    <script src='mapbox/leaflet.draw.js'></script>
+    <script src='mapbox/colorbrewer.js'></script>
+    <link href="js/nouislider.min.css" rel="stylesheet"/>
     <script src='js/nouislider.min.js'></script>
     <script src='js/wNumb.js'></script>
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection"/>
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <style>
-    body { margin:0; padding:0; }
-    .navbar-fixed {position: absolute;z-index:999999999;}
-    #main { position:absolute; top:0; bottom:0; width:100%;padding-left: 0px; }
-    /*#contral_panel {width:20%;height:100%;float:left;display:inline;}*/
-    #contral_panel{width:18%;height:50px;float:left;}
-    .map {width:83.7%;height:75%;margin-left:16.3%;}
-    .track_contral,#LDA_contral{margin:10px 0 0 10px;float:left;}
-    .track_contral{width:50px; margin:10px 0 0 10px;}
-	.time_contral{width:80px; margin-right:15px;}
-    p{display: inline; margin-left:20px;}
-	#parallel{width:45%; float:left;  margin-top:20px; margin-left:-110px;}
-	#aster{width:18%; float:left; margin-top:10px; margin-left: 200px;}
-      i.icon-blue{color:#336666}
-      #checkTrafficFlow{margin-left:50px ;}
-  </style>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar-fixed {
+            position: absolute;
+            z-index: 999999999;
+        }
+
+        #main {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            padding-left: 0px;
+        }
+
+        /*#contral_panel {width:20%;height:100%;float:left;display:inline;}*/
+        #contral_panel {
+            width: 18%;
+            height: 50px;
+            float: left;
+        }
+
+        .map {
+            width: 77%;
+            height: 75%;
+            margin-left: 23%;
+        }
+
+        .track_contral, #LDA_contral {
+            margin: 10px 0 0 10px;
+            float: left;
+        }
+
+        .track_contral {
+            width: 50px;
+            margin: 10px 0 0 10px;
+        }
+
+        .time_contral {
+            width: 80px;
+            margin-right: 15px;
+        }
+
+        p {
+            display: inline;
+            margin-left: 20px;
+        }
+
+        #parallel {
+            width: 20%;
+            float: left;
+            margin-top: 10px;
+            margin-left: 100px;
+        }
+
+        #aster {
+            width: 18%;
+            float: left;
+            margin-top: 20px;
+            margin-left: 300px;
+        }
+
+        i.icon-blue {
+            color: #336666
+        }
+
+        #checkTrafficFlow {
+            margin-left: 50px
+        }
+
+        .sigma-content {
+            margin: 10px;
+            text-align: center;
+            background-color: #fff;
+        }
+
+        .sigma-middle-line:before {
+            content: '';
+            display: block;
+            height: 1px;
+            width: 100%;
+            background-color: #999; /*颜色需与主题大背景色一致*/
+            position: relative;
+            top: 10px; /*调节线高*/
+            left: 0;
+        }
+
+        .sigma-line-text {
+            display: inline-block;
+            background: #fff;
+            padding: 0 18px 0 18px;
+            position: relative;
+            font-size: 14px;
+            font-weight: 500;
+        }
+    </style>
 </head>
 
 <body>
 <div id='main'>
-        <div class="navbar-fixed">
-            <nav class="transparent z-depth-0">
-                <div class="nav-wrapper">
-                    <div class="row">
-                        <div class="col s12">
-                            <ul class="left hide-on-med-and-down">
-                                <a href="#" data-target="slide-out" class="sidenav-trigger button-collapse show-on-large "><i class="material-icons icon-blue">menu</i></a>
-                                <li><a href="https://github.com/liuliyan1994/Visualization" target="_blank" style="color:#336666">Github</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
+    <!--<div class="navbar-fixed">-->
+    <!--<nav class="transparent z-depth-0">-->
+    <!--<div class="nav-wrapper">-->
+    <!--<div class="row">-->
+    <!--<div class="col s12">-->
+    <!--<ul class="left hide-on-med-and-down">-->
+    <!--<a href="#" data-target="slide-out" class="sidenav-trigger button-collapse show-on-large "><i class="material-icons icon-blue">menu</i></a>-->
+    <!--<li><a href="https://github.com/liuliyan1994/Visualization" target="_blank" style="color:#336666">Github</a></li>-->
+    <!--</ul>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</nav>-->
+    <!--</div>-->
     <!-- Switch -->
-    <div id='map-styled' class='map'> </div>
+    <div id='map-styled' class='map'></div>
     <div id='contral_panel'>
         <div id='LDA_contral'>
             <ul id="slide-out" class="sidenav sidenav-fixed">
                 <!--this part is only for giving the space-->
-                <li><div class="user-view">
-                    <div class="background">
-                        <img src="img/trafficLogo.jpg">
+                <!--<li><div class="user-view">-->
+                <!--<a href="#name"><span class="white-text name">Traffic Visualization</span></a>-->
+                <!--</div></li>-->
+                <div class="sigma-content">
+                    <div class="sigma-middle-line">
+                        <span class="sigma-line-text">Data Set</span>
                     </div>
-                    <a href="#name"><span class="white-text name">Traffic Visualization</span></a>
-                </div></li>
-               <!--switch-->
-                <form action="#">
-                    <p>
-                        <label>
-                            <input id="checkTrafficFlow" name="group1" type="radio" checked />
-                            <span>Traffic Flow</span>
-                        </label>
-                    </p>
-                    <br/>
-                    <br/>
-                    <p>
-                        <label>
-                            <input id="checkNMF" name="group1" type="radio" />
-                            <span>NMF</span>
-                        </label>
-                    </p>
+                </div>
+                <select class="browser-default">
+                    <option value="1">Using HangZhou Taxi Trajectory</option>
+                    <!--<option value="2">Option 2</option>-->
+                </select>
+                <div class="sigma-content">
+                    <div class="sigma-middle-line">
+                        <span class="sigma-line-text">Select View</span>
+                    </div>
+                </div>
+                <form>
+                    <div class="col s12">
+                        <p>
+                            <label>
+                                <input id="checkTrafficFlow" type="checkbox" class="filled-in"/>
+                                <span>Traffic flow analysis view</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="col s12">
+                        <p>
+                            <label>
+                                <input id="checkNMF" type="checkbox" class="filled-in"/>
+                                <span>NMF Topic analysis view</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="col s12">
+                        <p>
+                            <label>
+                                <input id="checkInterView" type="checkbox" class="filled-in"/>
+                                <span>interactive Topic analysis view</span>
+                            </label>
+                        </p>
+                    </div>
                 </form>
+                <!--switch-->
+                <form id="InteractiveView" action="#">
+                    <div class="col s12">
+                        <p>
+                            <label>
+                                <input id="topicMerging" name="group1" type="radio" checked/>
+                                <span>Topic merging</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="col s12">
+                        <p>
+                            <label>
+                                <input id="topicSpliting" name="group1" type="radio"/>
+                                <span>Topic spliting</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="col s12">
+                        <p>
+                            <label>
+                                <input id="checkNMF_1" name="group1" type="radio"/>
+                                <span>The first of topic creation</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="col s12">
+                        <p>
+                            <label>
+                                <input id="checkNMF_2" name="group1" type="radio"/>
+                                <span>The second of topic creation</span>
+                            </label>
+                        </p>
+                    </div>
+                </form>
+                <div class="sigma-content">
+                    <div class="sigma-middle-line">
+                        <span class="sigma-line-text">Select Time Interval</span>
+                    </div>
+                </div>
+
                 <div id="nmf_control">
-                    <h5 style="margin: 20px">NMF</h5>
+                    <!--<h5 style="margin: 20px">NMF</h5>-->
                     <div class="center-align">
+                        <h8 style="color: #90a4ae;">NMF Interval</h8>
                         <div id="NMF_time" style="margin:20px"></div>
                     </div>
                     <br/>
-                    <br/>
-                    <blockquote>
-                        Choose the duration.
-                    </blockquote>
+                    <!--<blockquote>-->
+                    <!--Choose the duration.-->
+                    <!--</blockquote>-->
                     <div id="ts_nmf" class="center-align">
-                        <button id="tSureID_nmf" class="btn waves-effect waves-light grey " type="submit" name="action" onclick="c_onclick()">Submit
+                        <button id="tSureID_nmf" class="btn waves-effect waves-light grey " type="submit" name="action"
+                                onclick="c_onclick()">confirm
                             <i class="material-icons right">send</i>
                         </button>
                     </div>
                 </div>
+                <br/>
+
                 <div id="TraVis_control">
-                    <h5 style="margin: 20px">Traffic Flow</h5>
                     <div class="center-align">
+                        <h8 style="color: #90a4ae;">Traffic Flow</h8>
                         <div id="TraVis_time" style="margin:20px"/>
                     </div>
                     <br/>
                     <br/>
-                    <blockquote>
-                        This is an hour analysis. Please select the hour you want to look up.
-                    </blockquote>
+                    <!--<blockquote>-->
+                    <!--This is an hour analysis. Please select the hour you want to look up.-->
+                    <!--</blockquote>-->
                     <div id="ts" class="center-align">
-                        <button id="tSureID" class="btn waves-effect waves-light grey " type="submit" name="action" onclick="c_onclick()">Submit
+                        <button id="tSureID" class="btn waves-effect waves-light grey " type="submit" name="action"
+                                onclick="c_onclick()">confirm
                             <i class="material-icons right">send</i>
                         </button>
                     </div>
                 </div>
-                <br/>
-                <br/>
-                <div id="switch_compare" class="switch center">
-                    <label>
-                        NaN
-                        <input id="checkCompare" type="checkbox">
-                        <span class="lever"></span>
-                        Compare
-                    </label>
-                </div>
-                <br/>
-                <br/>
+                <!--<div id="switch_compare" class="switch center">-->
+                <!--<label>-->
+                <!--NaN-->
+                <!--<input id="checkCompare" type="checkbox">-->
+                <!--<span class="lever"></span>-->
+                <!--Compare-->
+                <!--</label>-->
+                <!--</div>-->
             </ul>
 
         </div>
     </div>
     <div class="row">
-            <div id="chart"    style="margin-top: 40px"></div>
-            <div id='parallel' style="margin-top:40px"> </div>
-            <div id='aster'    style="margin-top: 20px"> </div>
+        <div id="chart" style="margin-top: 20px "></div>
+        <div id='parallel' style="margin-top: 20px"></div>
+        <div id='aster' style="margin-top: 10px"></div>
     </div>
 </div>
 <script src="src/groundVariable.js"></script>
+<script src='src/initControl.js'></script>
 <script src="src/test_tip.js"></script>
-<script src="src/draw.js" ></script>
+<script src="src/draw.js"></script>
 <script src="src/parallel1.js"></script>
 <script src="src/test_draw.js"></script>
-<script src='src/initControl.js'></script>
 <script src="src/drawNMF.js"></script>
 <script type="text/javascript" src="js/materialize.js"></script>
 </body>
