@@ -13,7 +13,7 @@ var species = ["topic0","topic1", "topic2", "topic3","topic4"],  //topic???
     traits = ["topic0", "topic1", "topic2", "topic3","topic4"]; //??????
 
 var m = [20, 10, 30, 40];
-var w = screenWidth*0.3 - m[1] - m[3];
+var w = screenWidth*0.4 - m[1] - m[3];
 var h = 170 - m[0] - m[2];
 
 let x = d3.scale.ordinal().domain(traits).rangePoints([0, w]),
@@ -54,8 +54,9 @@ parallel=[];
   var svg = d3.select("#parallel").append("svg:svg")
     .attr("id","parallelSVG")
     //.attr("width", w + m[1] + 10*m[3])
-	.attr("width", screenWidth*0.65)
+	.attr("width", screenWidth*0.7)
     .attr("height", h + m[0] + m[2])
+	  .style("margin-left", 40 + "px")
     .append("svg:g")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
   // Create a scale and brush for each trait.
@@ -82,7 +83,7 @@ parallel=[];
       .data(species)
       .enter().append("svg:g")
       .attr("class", "legend")
-      .attr("transform", function(d, i) {return "translate(" + (w+20) +"," + (i * 20+m[2]) + ")"; })
+      .attr("transform", function(d, i) {return "translate(" + (w+20) +"," + (i * 15+m[2]) + ")"; })
 	  .attr('stroke',function(d){ return c(legendScale(x(d)))});
 
   legend.append("svg:line")

@@ -24,6 +24,7 @@
     <link href="js/nouislider.min.css" rel="stylesheet"/>
     <script src='js/nouislider.min.js'></script>
     <script src='js/wNumb.js'></script>
+    <!--Bootstrap-->
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
@@ -57,9 +58,9 @@
         }
 
         .map {
-            width: 77%;
+            width: 76%;
             height: 75%;
-            margin-left: 23%;
+            margin-left: 24%;
         }
 
         .track_contral, #LDA_contral {
@@ -83,17 +84,27 @@
         }
 
         #parallel {
-            width: 20%;
+            width: 59%;
             float: left;
-            margin-top: 10px;
-            margin-left: 100px;
+            margin-left: 77px;
+            border-style: solid;
+            border-color: grey;
+            height: 178px;
         }
 
         #aster {
-            width: 18%;
+            width: 22.5%;
             float: left;
-            margin-top: 20px;
-            margin-left: 300px;
+            margin-left: 2px;
+            border-style: solid;
+            border-color: grey;
+            height: 178px;
+        }
+        #chart{
+            width: 980px;
+            height:179px;
+            border-style: solid;
+            border-color: grey;
         }
 
         i.icon-blue {
@@ -129,6 +140,10 @@
             font-size: 14px;
             font-weight: 500;
         }
+
+        .selectClass {
+            padding: 0 0 0 40px;
+        }
     </style>
 </head>
 
@@ -162,47 +177,55 @@
                         <span class="sigma-line-text">Data Set</span>
                     </div>
                 </div>
-                <select class="browser-default">
+                <select class="browser-default selectClass">
                     <option value="1">Using HangZhou Taxi Trajectory</option>
                     <!--<option value="2">Option 2</option>-->
                 </select>
+                <br/>
+                <br/>
                 <div class="sigma-content">
                     <div class="sigma-middle-line">
                         <span class="sigma-line-text">Select View</span>
                     </div>
                 </div>
-                <form>
+                <form id="Mycheckbox">
+                    <br/>
                     <div class="col s12">
                         <p>
                             <label>
-                                <input id="checkTrafficFlow" type="checkbox" class="filled-in"/>
+                                <input id="checkTrafficFlow" type="checkbox" name="group0" class="filled-in"
+                                       onclick="checkCancel(this)"/>
                                 <span>Traffic flow analysis view</span>
                             </label>
                         </p>
                     </div>
+                    <br/>
                     <div class="col s12">
                         <p>
                             <label>
-                                <input id="checkNMF" type="checkbox" class="filled-in"/>
+                                <input id="checkNMF" type="checkbox" name="group0" class="filled-in"
+                                       onclick="checkCancel(this)"/>
                                 <span>NMF Topic analysis view</span>
                             </label>
                         </p>
                     </div>
+                    <br/>
                     <div class="col s12">
                         <p>
                             <label>
-                                <input id="checkInterView" type="checkbox" class="filled-in"/>
+                                <input id="checkInterView" type="checkbox" name="group0" class="filled-in"
+                                       onclick="checkCancel(this)"/>
                                 <span>interactive Topic analysis view</span>
                             </label>
                         </p>
                     </div>
                 </form>
                 <!--switch-->
-                <form id="InteractiveView" action="#">
+                <form id="InteractiveView" action="#" style="margin-left: 30px">
                     <div class="col s12">
                         <p>
                             <label>
-                                <input id="topicMerging" name="group1" type="radio" checked/>
+                                <input id="topicMerging" name="group1" type="radio"/>
                                 <span>Topic merging</span>
                             </label>
                         </p>
@@ -232,6 +255,8 @@
                         </p>
                     </div>
                 </form>
+                <br/>
+                <br/>
                 <div class="sigma-content">
                     <div class="sigma-middle-line">
                         <span class="sigma-line-text">Select Time Interval</span>
@@ -241,7 +266,7 @@
                 <div id="nmf_control">
                     <!--<h5 style="margin: 20px">NMF</h5>-->
                     <div class="center-align">
-                        <h8 style="color: #90a4ae;">NMF Interval</h8>
+                        <!--<h8 style="color: #90a4ae;">NMF Interval</h8>-->
                         <div id="NMF_time" style="margin:20px"></div>
                     </div>
                     <br/>
@@ -255,11 +280,10 @@
                         </button>
                     </div>
                 </div>
-                <br/>
 
                 <div id="TraVis_control">
                     <div class="center-align">
-                        <h8 style="color: #90a4ae;">Traffic Flow</h8>
+                        <!--<h8 style="color: #90a4ae;">Traffic Flow</h8>-->
                         <div id="TraVis_time" style="margin:20px"/>
                     </div>
                     <br/>
@@ -286,10 +310,25 @@
 
         </div>
     </div>
-    <div class="row">
-        <div id="chart" style="margin-top: 20px "></div>
-        <div id='parallel' style="margin-top: 20px"></div>
-        <div id='aster' style="margin-top: 10px"></div>
+    <div id="chart_card" class="col s4 m4" style="margin-left: 300px">
+        <div >
+            <div id="chart" style="margin-top:1px">
+                <div class="grey white-text">Matrix scatter plot view</div>
+                <br/>
+            </div>
+        </div>
+    </div>
+    <div id="parallel_card" style="margin-left: 100px">
+        <div class="row">
+                    <div id='parallel' style="margin-top:1px" >
+                        <div class=" grey white-text">parallel coordinate view</div>
+                        <br/>
+                    </div>
+                    <div id='aster' style="margin-top:1px">
+                        <div class="grey white-text">pie chart view</div>
+                        <br/>
+                    </div>
+        </div>
     </div>
 </div>
 <script src="src/groundVariable.js"></script>

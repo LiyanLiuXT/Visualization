@@ -1,12 +1,12 @@
 console.log("initControl");
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     //sidenav
     const nav = document.querySelectorAll('.sidenav');
     var Nav = M.Sidenav.init(nav, {});
 
     //selector
     var selector = document.querySelectorAll('select');
-    var Selector = M.FormSelect.init(selector,{});
+    var Selector = M.FormSelect.init(selector, {});
 
     //slider
     var slider = document.getElementById('test-slider');
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         orientation: 'horizontal', // 'horizontal' or 'vertical'
         range: {
             'min': 0,
-            'max':24
+            'max': 24
         },
         format: wNumb({
             decimals: 0
@@ -56,19 +56,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
 let NMF_time_slider = document.getElementById('NMF_time');
 noUiSlider.create(NMF_time_slider, {
-    start: [5,20],
-    connect:true,
+    start: [5, 20],
+    connect: true,
     range: {
         min: 0,
         max: 23
     },
     pips: {
         mode: 'values',
-        values: [0,6,12,18,23],
+        values: [0, 6, 12, 18, 23],
         density: 4
     }
 });
-NMF_time_slider.noUiSlider.on('update',function (value,handle) {
+NMF_time_slider.noUiSlider.on('update', function (value, handle) {
     time_nmf[handle] = value[handle];
     Handle_nmf = handle;
 });
@@ -81,72 +81,78 @@ noUiSlider.create(TraVis_time_slider, {
     },
     pips: {
         mode: 'values',
-        values: [0,6,12,18,23],
+        values: [0, 6, 12, 18, 23],
         density: 4
     }
 });
-TraVis_time_slider.noUiSlider.on('update',function (value,handle) {
-   time[handle] = value[handle];
-   Handle = handle;
+TraVis_time_slider.noUiSlider.on('update', function (value, handle) {
+    time[handle] = value[handle];
+    Handle = handle;
 });
 $("#nmf_control").hide();
 $("#chart").hide();
 $("#InteractiveView").hide();
+$("#parallel").hide();
+$("#aster").hide();
 
 $(document).ready(function () {
     drawNMF_graph();
-    $("input").change(function() {
-        if($("#checkNMF").is(':checked')) {
+    $("input").change(function () {
+        if ($("#checkNMF").is(':checked')) {
             $("#nmf_control").show();
             $("#chart").show();
-            localStorage.setItem("switchTraNmf",1);
-        }
-        else{
+            $("#chart_card").show();
+            localStorage.setItem("switchTraNmf", 1);
+        } else {
             $("#nmf_control").hide();
             $("#chart").hide();
-            localStorage.setItem("switchTraNmf",0);
+            $("#chart_card").hide();
+            localStorage.setItem("switchTraNmf", 0);
         }
-        if($("#checkTrafficFlow").is(':checked')){
-            localStorage.setItem("switchTrafficFlow",1);
+        if ($("#checkTrafficFlow").is(':checked')) {
+            localStorage.setItem("switchTrafficFlow", 1);
             $("#TraVis_control").show();
-        }
-        else{
-            localStorage.setItem("switchTrafficFlow",0);
+            $("#parallel").show();
+            $("#parallel_card").show();
+            $("#aster").show();
+            // $("#aster_card").show();
+        } else {
+            localStorage.setItem("switchTrafficFlow", 0);
             $("#TraVis_control").hide();
+            $("#parallel").hide();
+            $("#aster").hide();
+            $("#parallel_card").hide();
+            // $("#aster_card").hide();
         }
-        if($("#checkInterView").is(':checked')){
-            localStorage.setItem("InteractiveView",1);
+        if ($("#checkInterView").is(':checked')) {
+            localStorage.setItem("InteractiveView", 1);
             $("#InteractiveView").show();
-        }
-        else{
-            localStorage.setItem("InteractiveView",0);
+        } else {
+            localStorage.setItem("InteractiveView", 0);
             $("#InteractiveView").hide();
         }
     });
-    if($("#checkNMF").is(':checked')) {
+    if ($("#checkNMF").is(':checked')) {
         $("#nmf_control").show();
         $("#chart").show();
-        localStorage.setItem("switchTraNmf",1);
-    }
-    else{
+        localStorage.setItem("switchTraNmf", 1);
+    } else {
         $("#nmf_control").hide();
         $("#chart").hide();
-        localStorage.setItem("switchTraNmf",0);
+        localStorage.setItem("switchTraNmf", 0);
     }
-    if($("#checkTrafficFlow").is(':checked')){
-        localStorage.setItem("switchTrafficFlow",1);
+    if ($("#checkTrafficFlow").is(':checked')) {
+        localStorage.setItem("switchTrafficFlow", 1);
         $("#TraVis_control").show();
-    }
-    else{
-        localStorage.setItem("switchTrafficFlow",0);
+    } else {
+        localStorage.setItem("switchTrafficFlow", 0);
         $("#TraVis_control").hide();
     }
-    if($("#checkInterView").is(':checked')){
-        localStorage.setItem("InteractiveView",1);
+    if ($("#checkInterView").is(':checked')) {
+        localStorage.setItem("InteractiveView", 1);
         $("#InteractiveView").show();
-    }
-    else{
-        localStorage.setItem("InteractiveView",0);
+    } else {
+        localStorage.setItem("InteractiveView", 0);
         $("#InteractiveView").hide();
     }
     // if($("#checkCompare").is(':checked')){
@@ -162,13 +168,19 @@ function c_onclick() {
     console.log("c_onclick");
     let switchTraNmf = localStorage.getItem("switchTraNmf");
     let switchTrafficFlow = localStorage.getItem("switchTrafficFlow")
-   if(switchTraNmf==1){
-       drawNMFmapHourly();
-       console.log("drawNMFmapHourly");
-   }
-   if(switchTrafficFlow ==1) {
-       drawGrids();
-       console.log("drawGrid");
-   }
+    if (switchTraNmf == 1) {
+        drawNMFmapHourly();
+        console.log("drawNMFmapHourly");
+    }
+    if (switchTrafficFlow == 1) {
+        drawGrids();
+        console.log("drawGrid");
+    }
 }
 
+function checkCancel(Obj) {
+    $("input[name='group0']").each(function () {
+        $(this).prop("checked",false);
+    })
+   Obj.checked = true;
+}

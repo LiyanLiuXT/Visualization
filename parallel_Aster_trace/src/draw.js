@@ -2,8 +2,8 @@
     height = 500,
     radius = Math.min(width, height) / 2,
     innerRadius = 0.3 * radius;   //原始设置 */
-var width = 300,
-    height = 170,
+var width = 250,
+    height = 140,
     radius = Math.min(width, height) / 2,
     innerRadius = 0.3 * radius;
 
